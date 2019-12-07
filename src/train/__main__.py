@@ -108,8 +108,7 @@ def main():
 
 
 args = sys.argv
-
-if AUTO_PRINT_HELP:
+if AUTO_PRINT_HELP and not('--no-manual in args'):
     print(manual.MANUAL)
 print(args)
 # main()
