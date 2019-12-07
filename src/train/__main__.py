@@ -49,8 +49,8 @@ def get_train_test_images_from_directory(dataset_dir, data_size):
             if '.DS_Store' in image_dir:
                 image_dir.remove('.DS_Store')
             
-            if data_size > 0:
-                image_dir = image_dir[:data_size]
+            if data_size >= 0:
+                image_dir = image_dir[:min(data_size, len(image_dir))]
             split_point = round(0.8*len(image_dir))
             train_images, test_images = image_dir[:split_point], image_dir[split_point:]
 
