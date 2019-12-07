@@ -5,6 +5,8 @@ import pickle
 from PIL import Image
 import cv2
 from sklearn.ensemble import RandomForestClassifier
+from helper import manual
+from config import AUTO_PRINT_HELP
 
 default_image_size = tuple((45,45))
 
@@ -48,7 +50,7 @@ def get_train_test_images_from_directory(dataset_dir):
                 image_dir.remove('.DS_Store')
             
             split_point = int(0.8*len(image_dir))
-            train_images, test_images = image_dir[:1000], image_dir[1000:]
+            train_images, test_images = image_dir[:1000], image_dir[100:]
 
             for images in train_images:
                 X_train.append(get_image_matrix(f"{dataset_dir}/{directory}/{images}"))
@@ -103,4 +105,11 @@ def main():
     except Exception as e:
         print(f"Error : {e}")
 
-main()
+
+
+args = sys.argv
+
+if AUTO_PRINT_HELP:
+    print(manual.MANUAL)
+print(args)
+# main()
