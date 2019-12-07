@@ -26,7 +26,7 @@ def get_image_matrix(image_dir):
     except Exception as e:
         return None
 
-def get_train_test_images_from_directory(dataset_dir):
+def get_train_test_images_from_directory(dataset_dir, data_size):
     X_train, X_test, Y_train, Y_test = [], [], [], []
     try:
         directory_list = listdir(dataset_dir)
@@ -49,8 +49,10 @@ def get_train_test_images_from_directory(dataset_dir):
             if '.DS_Store' in image_dir:
                 image_dir.remove('.DS_Store')
             
-            split_point = int(0.8*len(image_dir))
-            train_images, test_images = image_dir[:1000], image_dir[100:]
+            if data_size > 0:
+                image_dir = image_dir[:data_size]
+            split_point = round(0.8*len(image_dir))
+            train_images, test_images = image_dir[:split_point], image_dir[split_point:]
 
             for images in train_images:
                 X_train.append(get_image_matrix(f"{dataset_dir}/{directory}/{images}"))
@@ -65,10 +67,12 @@ def get_train_test_images_from_directory(dataset_dir):
         print(f"Error : {e}")
         return None, None, None, None
 
-def train_model():
+def train_model(data_size):
     train_dataset_dir = "./Dataset"
-    X_train, X_test, Y_train, Y_test = get_train_test_images_from_directory(train_dataset_dir)
-    if X_train is not None and X_test is not None and Y_train is not None and Y_test is not None :
+    X_train, X_test, Y_train, Y_test = (
+        get_train_test_images_from_directory(train_dataset_dir, data_size)
+    )
+    if X_train and X_test and Y_train and Y_test:
         random_forest_classifier = RandomForestClassifier()
         random_forest_classifier.fit(X_train,Y_train)
         accuracy_score = random_forest_classifier.score(X_train,Y_train)
@@ -78,27 +82,31 @@ def train_model():
         test_accuracy_score = random_forest_classifier.score(X_test,Y_test)
         print(f"Model Accuracy Score (Test) : {test_accuracy_score}")
     else :
-        print("An error occurred.")
+        print("Data set it empty.")
 
 
-def main():
+def test_model(image_file):
+    print("Load model")
+    with open("Model/random_forest_classifier.pkl",'rb') as input_model:
+        saved_decision_tree_classifier_model = pickle.load(input_model)
+    model_prediction = saved_decision_tree_classifier_model.predict(image_file)
+    print(f"Recognized Digit : {model_prediction[0]} ")
+    print("Day la so 0")
+
+
+def main(data_size=-1):
     try:
-        image_directory = '156.jpg'
+        image_directory = './Dataset/test/0.jpg'
         image_file = [get_image_matrix(image_directory)]
         print(image_file)
         # load saved model
         try:
-            print("1111")
-            with open("Model/random_forest_classifier.pkl",'rb') as input_model:
-                saved_decision_tree_classifier_model = pickle.load(input_model)
-            model_prediction = saved_decision_tree_classifier_model.predict(image_file)
-            print(f"Recognized Digit : {model_prediction[0]} ")
-            print("Day la so 0")
-            # print(f"Recognized Digit : {model_prediction[0]} \nLatex Equivalent : {transform_to_latex(model_prediction[0])}")
+            test_model(image_file)
         except FileNotFoundError as model_file_error:
-            print(f"Error : {model_file_error}")
             print("... Training Model")
-            train_model()
+            train_model(data_size)
+            print("... Training Finishes")
+            test_model(image_file)
         
     except FileNotFoundError as file_error:
         print(f"Error : {file_error}")
@@ -110,5 +118,16 @@ def main():
 args = sys.argv
 if AUTO_PRINT_HELP and not('--no-manual in args'):
     print(manual.MANUAL)
-print(args)
-# main()
+data_size = -1
+if '-l' in args:
+    data_size = 10
+    index_l = args.index('-l')
+    if index_l + 2 <= len(args):
+        try:
+            data_size = int(args[index_l + 1])
+        except Exception:
+            pass
+if '-r' in args:
+    train_model(data_size)
+print('data size: ', data_size)
+main(data_size)
