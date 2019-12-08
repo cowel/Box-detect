@@ -1,3 +1,10 @@
+import logging as logger
+from .defaults import *
+
+
+logger.basicConfig(level=logger.DEBUG)
+
+
 # Full config
 ACCEPTED_IMAGE_END = ('.jpg', '.JPG')
 

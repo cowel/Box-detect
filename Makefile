@@ -1,5 +1,5 @@
 train:
-	PYTHONPATH=./src python src/train --no-manual -r -l
+	PYTHONPATH=./src python bin/train_model.py --no-manual -r -l
 
 heavy-train:
 	PYTHONPATH=./src python src/train --no-manual -r -h
