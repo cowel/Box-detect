@@ -5,6 +5,7 @@ import pickle
 from PIL import Image
 import cv2
 from sklearn.ensemble import RandomForestClassifier
+from random import shuffle
 from helper import manual
 from config import AUTO_PRINT_HELP
 
@@ -49,6 +50,7 @@ def get_train_test_images_from_directory(dataset_dir, data_size):
             if '.DS_Store' in image_dir:
                 image_dir.remove('.DS_Store')
             
+            image_dir = shuffle(image_dir)
             if data_size >= 0:
                 image_dir = image_dir[:min(data_size, len(image_dir))]
             split_point = round(0.8*len(image_dir))
@@ -114,20 +116,20 @@ def main(data_size=-1):
         print(f"Error : {e}")
 
 
-
-args = sys.argv
-if AUTO_PRINT_HELP and not('--no-manual in args'):
-    print(manual.MANUAL)
-data_size = -1
-if '-l' in args:
-    data_size = 10
-    index_l = args.index('-l')
-    if index_l + 2 <= len(args):
-        try:
-            data_size = int(args[index_l + 1])
-        except Exception:
-            pass
-if '-r' in args:
-    train_model(data_size)
-print('data size: ', data_size)
-main(data_size)
+if __name__ == '__main__':
+    args = sys.argv
+    if AUTO_PRINT_HELP and not('--no-manual in args'):
+        print(manual.MANUAL)
+    data_size = -1
+    if '-l' in args:
+        data_size = 10
+        index_l = args.index('-l')
+        if index_l + 2 <= len(args):
+            try:
+                data_size = int(args[index_l + 1])
+            except Exception:
+                pass
+    if '-r' in args:
+        train_model(data_size)
+    print('data size: ', data_size)
+    main(data_size)
