@@ -3,3 +3,6 @@ train:
 
 heavy-train:
 	PYTHONPATH=./src python src/train --no-manual -r -h
+
+test-train:
+	PYTHONPATH=./src python src/train --no-manual

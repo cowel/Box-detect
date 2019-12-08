@@ -245,12 +245,12 @@ def box_extraction(img_for_box_extraction_path, cropped_dir_path):
             l =len(Ar)
             Ar = Ar[:-1]
         Brr.append(Ar)
-    
 
     cv2.imwrite("img_final_bin.jpg", img_final_bin)
     df = pd.DataFrame(data = Brr[3:])
     writer = pd.ExcelWriter('example.xlsx', engine='xlsxwriter')
     df.to_excel(writer, sheet_name='Sheet1',header = False)
     writer.save()
-    
+
+
 box_extraction("0001.jpg", "./Cropped/")
