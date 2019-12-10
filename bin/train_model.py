@@ -45,6 +45,16 @@ if __name__ == '__main__':
                 pass
     logger.info('Data size: %r', data_size)
 
+    default_model = DEFAULT_MODEL
+    if '-m' in args:
+        index_m = args.index('-m')
+        if index_m + 2 <= len(args):
+            try:
+                default_model = int(args[index_m + 1])
+            except Exception:
+                pass
+    logger.info('Data default_model: %r', MODELS[default_model][0].__class__.__name__)
+
     X, y = get_images_from_directory(DEFAULT_DATASET_DIR, data_size)
     if '-r' in args:
         if '-a' in args:
