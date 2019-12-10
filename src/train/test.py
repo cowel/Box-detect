@@ -20,3 +20,5 @@ def test_model_by_image(model, image_dir, number):
 def test_model(model, X_test, y_test):
     test_accuracy_score = model.score(X_test, y_test)
     logger.warning("Model Accuracy Score %r:", test_accuracy_score)
+    score_str = str(round(test_accuracy_score, 2))
+    return test_accuracy_score, score_str + '0' * (4 - len(score_str))

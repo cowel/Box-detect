@@ -20,12 +20,12 @@ def train_model(data_size, model, model_name, X, y, ampha=0.8):
     model.fit(X_train, y_train)
 
     logger.info('Test model with train set')
-    test_model(model, X_train, y_train)
+    _, train_score = test_model(model, X_train, y_train)
     logger.info('Test model with test set')
-    test_model(model, X_test, y_test)
+    _, test_score = test_model(model, X_test, y_test)
 
     # save classifier
-    model_dir = f'{DEFAULT_MODEL_DIR}/{model_name}.pkl'
+    model_dir = f'{DEFAULT_MODEL_DIR}/{model_name}_{test_score}_{train_score}.pkl'
     logger.info('Saving model at: %r', model_dir)
     pickle.dump(model,open(model_dir,'wb'))
     logger.info('Model is saved')
