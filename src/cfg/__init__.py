@@ -1,9 +1,11 @@
 import logging as logger
-from .defaults import *
+from .color import ColoredLogger
+import coloredlogs
 
 
+coloredlogs.install()
 logger.basicConfig(level=logger.DEBUG)
-
+logger.setLoggerClass(ColoredLogger)
 
 # Full config
 ACCEPTED_IMAGE_END = ('.jpg', '.JPG')

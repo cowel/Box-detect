@@ -12,8 +12,8 @@ def train_model(data_size, model, model_name, X, y, ampha=0.8):
         logger.error('Dataset is empty')
         return
 
-    train_size = min(round(ampha * len(x)), len(x) - 1)
-    X_train, X_test = x[:train_size], X[train_size:]
+    train_size = min(round(ampha * len(X)), len(X) - 1)
+    X_train, X_test = X[:train_size], X[train_size:]
     y_train, y_test = y[:train_size], y[train_size:]
 
     logger.info('Training model %r with name %r', model.__class__.__name__, model_name)
